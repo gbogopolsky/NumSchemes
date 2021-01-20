@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import numpy as np
 import argparse
@@ -8,6 +9,7 @@ from test_funcs import gaussian, step, packet_wave
 from utils import create_dir
 from fd_schemes import its_fd
 from errors import L1error, L2error, Linferror
+
 
 def main(args):
     # figures directory
@@ -113,6 +115,7 @@ def main(args):
                     errors[i_mesh, i_scheme, i_func] = L1error(u_th, u_sim[i_scheme, :], ncx)
         # One plot per cfl
         plot_cvg(nnxs, schemes, functions, errors, f'CFL = {cfl:.2f}', cvg_dir + f'cfl_{index}')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

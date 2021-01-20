@@ -36,9 +36,11 @@ def plot_sim(x_th, x, x0, u_gauss, u_step, u_2pw, u_4pw, schemes, figtitle, fign
     fig.savefig(figname, bbox_inches='tight')
     plt.close(fig)
 
+
 def ax_prop_sim(ax):
     ax.legend()
     ax.grid(True)
+
 
 def plot_G(scheme, cfls, fig_dir):
     """ Plot the diffusion and dispersion errors from the amplification factor """
@@ -55,6 +57,7 @@ def plot_G(scheme, cfls, fig_dir):
     fig.suptitle(f'{scheme} Spectral Analysis')
     fig.savefig(fig_dir + f'errors_{scheme}', bbox_inches='tight')
 
+
 def ax_prop_G(ax, ylabel, ylim=None):
     """ Ax properties of plot_G """
     ax.legend()
@@ -63,6 +66,7 @@ def ax_prop_G(ax, ylabel, ylim=None):
     ax.set_ylabel(ylabel)
     ax.set_ylim(bottom=0)
     ax.set_xlim([0, 180])
+
 
 def plot_cvg(nnxs, schemes, functions, errors, figtitle, figname):
     """ Plot convergence of the solution to the exact one for schemes and functions 
@@ -76,6 +80,7 @@ def plot_cvg(nnxs, schemes, functions, errors, figtitle, figname):
     fig.suptitle(figtitle)
     fig.savefig(figname, bbox_inches='tight')
     plt.close()
+
 
 def ax_prop_cvg(ax):
     """ Ax properties of plot_cvg """
