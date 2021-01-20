@@ -45,7 +45,7 @@ def ax_prop_sim(ax):
 def plot_G(scheme, cfls, fig_dir):
     """ Plot the diffusion and dispersion errors from the amplification factor """
     phi = np.linspace(0, np.pi, 300)
-    phi_deg = phi * 180 / np.pi    
+    phi_deg = phi * 180 / np.pi
     fig, axes = plt.subplots(ncols=2, figsize=(10, 6))
     for cfl in cfls:
         # df_err, dp_err = sp_analysis.errors(getattr(sp_analysis, f'G_{scheme}'), phi, cfl)

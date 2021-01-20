@@ -52,13 +52,13 @@ def main(args):
     # Launching all the cases
     for index, cfl in enumerate(cfls):
         dt = dx * cfl / a
-        
+
         # initialization (number of timesteps required to do a full round)
         x = np.linspace(xmin, xmax, nnx)
-        u_gauss = np.tile(gaussian(x, x0, 0.3), n_schemes).reshape(n_schemes,  nnx)
-        u_step = np.tile(step(x, x0), n_schemes).reshape(n_schemes,  nnx)
-        u_2pw = np.tile(packet_wave(x, x0, 0.5), n_schemes).reshape(n_schemes,  nnx)
-        u_4pw = np.tile(packet_wave(x, x0, 0.25), n_schemes).reshape(n_schemes,  nnx)
+        u_gauss = np.tile(gaussian(x, x0, 0.3), n_schemes).reshape(n_schemes, nnx)
+        u_step = np.tile(step(x, x0), n_schemes).reshape(n_schemes, nnx)
+        u_2pw = np.tile(packet_wave(x, x0, 0.5), n_schemes).reshape(n_schemes, nnx)
+        u_4pw = np.tile(packet_wave(x, x0, 0.25), n_schemes).reshape(n_schemes, nnx)
         res = np.zeros_like(x)
         nt = int(n_periods * Lx / a / dt)
 
@@ -72,11 +72,11 @@ def main(args):
             its_fd(nt, res, u_4pw[i_scheme, :], cfl, scheme)
 
         # One plot per cfl
-        plot_sim(x_th, x, x0, u_gauss, u_step, u_2pw, u_4pw, 
-                schemes, f'CFL = {cfl:.2f} - dx = {dx:.2e} m - dt = {dt:.2e} s - nits = {nt:d}', 
-                sim_dir + f'sim_cfl_{index}')
+        plot_sim(x_th, x, x0, u_gauss, u_step, u_2pw, u_4pw,
+                 schemes, f'CFL = {cfl:.2f} - dx = {dx:.2e} m - dt = {dt:.2e} s - nits = {nt:d}',
+                 sim_dir + f'sim_cfl_{index}')
 
-    # Plot the diffusion and disperson errors 
+    # Plot the diffusion and dispersion errors
     # from the amplification factors of the schemes
     print(f'\n--> Plotting amplifications factors...')
     for scheme in schemes:
@@ -85,7 +85,7 @@ def main(args):
     print('\n-------------------------------------------------------')
     print(f'Studying mesh convergence')
     print('-------------------------------------------------------')
-    
+
     # Mesh convergence of the schemes
     functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
     nnxs = np.array([51, 101, 201, 501])
@@ -104,10 +104,10 @@ def main(args):
             res = np.zeros_like(x)
 
             print(f'CFL = {cfl:.2f} - nt = {nt:d}')
-            
+
             for i_func, function in enumerate(functions):
                 u_th = eval(function)
-                u_sim = np.tile(u_th, n_schemes).reshape(n_schemes,  nnx)
+                u_sim = np.tile(u_th, n_schemes).reshape(n_schemes, nnx)
 
                 # Iteration of the schemes
                 for i_scheme, scheme in enumerate(schemes):
