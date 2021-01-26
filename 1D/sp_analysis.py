@@ -3,6 +3,7 @@ import os
 import numpy as np
 import cmath
 import matplotlib.pyplot as plt
+from fd_schemes import bjs
 
 
 def G_LW(phi, sigma):
@@ -37,6 +38,16 @@ def G_C2(phi, sigma):
                     + (sigma - 2) * (sigma - 1) * (sigma + 1) * (sigma + 2) / 4
                     - (sigma - 2) * (sigma - 1) * sigma * (sigma + 2) / 6 * np.exp(1j * phi)
                     + (sigma - 2) * (sigma - 1) * sigma * (sigma + 1) / 24 * np.exp(2j * phi))
+
+def ampl_factor(phi, sigma, scheme):
+    """ Return the amplification factor for a scheme with ju upwind points
+    jd downwind points and coeffs coefficients """
+    coeffs, ju, jd = bjs(sigma, scheme)
+    G = np.zeros_like(phi)
+    for j in range(-ju, jd + 1):
+        G += coeffs[ju + j] * np.exp(j * 1j * phi)
+    return G
+
 
 def errors(G, phi, sigma):
     """ Computation of diffusion and dispersion error for a constant advection
