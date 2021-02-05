@@ -27,7 +27,11 @@ class FreeFall:
 
     def D(self, u):
         """ Compute the drag force of the sphere in free fall """
-        return np.where(u > 0, 0.5 * self.rho_g * np.pi**2 * self.a**2 * u**2 * self.C_D(u), 0)
+        return 0.5 * self.rho_g * np.pi**2 * self.a**2 * (
+            12 * self.mu_g / self.rho_g / self.a * u
+            + 6 * u**2 / (1 + np.sqrt(2 * self.rho_g * u * self.a / self.mu_g))
+            + 0.4 * u**2
+        )
     
     def f(self, u):
         """ The function of the rhs in the ODE equation """
@@ -82,9 +86,11 @@ if __name__ == '__main__':
     sim = ODESim(times, model)
 
     # Apply scheme and plot the results
+    print('Forward Euler scheme')
     sim.forwardEuler()
     model.plot(sim.times, sim.v, "Forward Euler", fig_dir.name + '/fwd_euler')
 
     # Apply midpoint and plot the results
+    print('Midpoint scheme')
     sim.midpoint()
     model.plot(sim.times, sim.v, "Midpoint formula", fig_dir.name + '/midpoint')
