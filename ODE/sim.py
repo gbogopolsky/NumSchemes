@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import create_dir
-from models import FreeFall, RHSSquare
+from models import FreeFall, RHSSquare, Pendulum
 
 class ODESim:
     def __init__(self, times, schemes, model, init_value, fig_dir=None):
@@ -16,7 +16,7 @@ class ODESim:
         self.nschemes = len(schemes)
 
         # variable of interest
-        self.v = np.zeros((self.nschemes, self.ntimes))
+        self.v = np.zeros((self.nschemes, self.ntimes, self.model.nd))
         self.v0 = init_value
 
         # Figures directory
@@ -56,7 +56,7 @@ class ODESim:
             self.model.plot(self.times, self.v[i_scheme, :], name_scheme, self.fig_dir + name_scheme)
 
 if __name__ == '__main__':
-    # Time initialization
+    # Free falling ice sphere
     tmin, tend, ntimes = 0, 25, 101
     times = np.linspace(tmin, tend, ntimes)
     model = FreeFall(0.01, 917, 0.9, 1.69e-5, 9.81)
@@ -67,6 +67,14 @@ if __name__ == '__main__':
     # Second test with other model
     tmin, tend, ntimes = 0, 10, 101
     times = np.linspace(tmin, tend, ntimes)
-    sim = ODESim(times, ['forwardEuler', 'midpoint', 'multi_step2'], RHSSquare(), 1.0, fig_dir='rhs_square')
+    sim = ODESim(times, ['forwardEuler', 'midpoint', 'multi_step2'], RHSSquare(), 1.0, fig_dir='rhs_square/')
+    sim.run_schemes()
+    sim.plot()
+
+    # Pendulum system model
+    tmin, tend, ntimes = 0, 10, 501
+    times = np.linspace(tmin, tend, ntimes)
+    sim = ODESim(times, ['forwardEuler', 'midpoint'], Pendulum(1, 9.81), 
+        np.array([0.0, 45 * np.pi / 180]), fig_dir='pendulum/')
     sim.run_schemes()
     sim.plot()

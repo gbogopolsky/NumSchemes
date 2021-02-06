@@ -15,7 +15,10 @@ class FreeFall:
 
         # Gravity coefficient
         self.g = g 
-    
+
+        # Dimension of the system
+        self.nd = 1
+
     def Re(self, u):
         """ Compute the Reynolds number of the sphere in FreeFall """
         return 2 * self.rho_g * u * self.a / self.mu_g
@@ -50,6 +53,10 @@ class FreeFall:
         fig.savefig(figname, bbox_inches='tight')
 
 class RHSSquare:
+    def __init__(self):
+        # Dimension of the system
+        self.nd = 1
+
     def f(self, u):
         return - u**2
     
@@ -59,7 +66,7 @@ class RHSSquare:
     def ax_plot(self, axes, time, u, u_exact, linestyle):
         axes[0].plot(time, u, linestyle)
         axes[0].set_xlabel('$t$ [s]')
-        axes[1].plot(time, np.abs(u - u_exact), linestyle)
+        axes[1].plot(time, np.abs(u[:, 0] - u_exact), linestyle)
     
     def plot(self, time, u, figtitle, figname):
         fig, axes = plt.subplots(nrows=2, sharex=True)
@@ -67,6 +74,29 @@ class RHSSquare:
         axes[0].plot(time, u_exact, 'k--')
         self.ax_plot(axes, time, u, u_exact, 'k')
         axes[0].legend(['Exact', 'Simulation'])
+        fig.suptitle(figtitle)
+        fig.tight_layout(rect=[0, 0.03, 1, 0.97])
+        fig.savefig(figname, bbox_inches='tight')
+
+class Pendulum:
+    def __init__(self, L, g):
+        # Parameters of the model
+        self.L = L
+        self.g = g
+
+        # Dimension of the system
+        self.nd = 2
+    
+    def f(self, u):
+        return np.array([-self.g / self.L * np.sin(u[1]), u[0]])
+    
+    def plot(self, time, u, figtitle, figname):
+        fig, axes = plt.subplots(nrows=2, sharex=True)
+        axes[0].plot(time, u[:, 1], 'k')
+        axes[0].set_ylabel(r'$\theta$')
+        axes[1].plot(time, u[:, 0], 'k')
+        axes[1].set_ylabel(r'$\theta_t$')
+        axes[1].set_xlabel('$t$ [s]')
         fig.suptitle(figtitle)
         fig.tight_layout(rect=[0, 0.03, 1, 0.97])
         fig.savefig(figname, bbox_inches='tight')
