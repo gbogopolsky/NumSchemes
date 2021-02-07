@@ -44,12 +44,20 @@ class ODESim:
             v[i] = - 4 * v[i - 1] + 5 * v[i - 1] + self.dt * \
                         (4 * self.model.f(v[i - 1], self.times[i - 1]) + 2 * self.model.f(v[i - 2], self.times[i - 2]))
     
+    def backwardEuler(self, v):
+        v[0] = self.v0
+        for i in range(1, self.ntimes):
+            v[i] = self.model.fbackwardEuler(v[i - 1], self.times[i - 1], self.dt)
+    
     def run_schemes(self):
         """ Apply scheme and plot the results """
         for i_scheme, name_scheme in enumerate(self.schemes):
             scheme = getattr(self, name_scheme)
             scheme(self.v[i_scheme, :])
     
-    def plot(self):
+    def plot(self, figname=None):
         for i_scheme, name_scheme in enumerate(self.schemes):
-            self.model.plot(self.times, self.v[i_scheme, :], name_scheme, self.fig_dir + name_scheme)
+            if figname is None:
+                self.model.plot(self.times, self.v[i_scheme, :], f'{name_scheme} - dt = {self.dt:.2e}', self.fig_dir + name_scheme)
+            else:
+                self.model.plot(self.times, self.v[i_scheme, :], f'{name_scheme} - dt = {self.dt:.2e}', self.fig_dir + figname)

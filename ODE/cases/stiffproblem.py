@@ -12,6 +12,11 @@ class StiffProblem:
     def f(self, u, t):
         return - self.lambda_1 * u + self.lambda_1 / 10 * np.sin(self.lambda_2 * t)
     
+    def fbackwardEuler(self, u, t, dt):
+        """ Hardcode backward Euler for this problem """
+        return (u + self.lambda_1 * dt / 10 * np.sin(self.lambda_2 * (t + dt))) \
+                            / (1 + self.lambda_1 * dt)
+    
     def plot(self, time, u, figtitle, figname):
         fig, ax = plt.subplots()
         ax.plot(time, u, 'k')
@@ -21,10 +26,17 @@ class StiffProblem:
 
 if __name__ == '__main__':
     model = StiffProblem(1000, 1)
-    tmin, tend = 0, 10
+    tmin, tend = 0, 5
     dts = [1.0e-3, 1.9e-3, 2.0e-3, 2.1e-3]
     for i, dt in enumerate(dts):
         times = make_times(tmin, tend, dt)
-        sim = ODESim(times, ['forwardEuler'], model, 1.0, fig_dir=f'stiffproblem/case_{i:d}/')
+        sim = ODESim(times, ['forwardEuler'], model, 1.0, fig_dir=f'stiffproblem/FE/')
         sim.run_schemes()
-        sim.plot()
+        sim.plot(f'case_{i:d}')
+
+    dts = [5e-4, 5e-3, 5e-2, 5e-1]
+    for i, dt in enumerate(dts):
+        times = make_times(tmin, tend, dt)
+        sim = ODESim(times, ['backwardEuler'], model, 1.0, fig_dir=f'stiffproblem/BE/')
+        sim.run_schemes()
+        sim.plot(f'case_{i:d}')
