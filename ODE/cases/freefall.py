@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from odesolver.solver import ODESim
 
 class FreeFall:
     """ Class of evaluation of FreeFall problem """
@@ -35,7 +36,7 @@ class FreeFall:
             + 0.4 * u**2
         )
     
-    def f(self, u):
+    def f(self, u, t):
         """ The function of the rhs in the ODE equation """
         return self.g - self.D(u) / self.m_p
     
@@ -52,51 +53,11 @@ class FreeFall:
         fig.tight_layout(rect=[0, 0.03, 1, 0.97])
         fig.savefig(figname, bbox_inches='tight')
 
-class RHSSquare:
-    def __init__(self):
-        # Dimension of the system
-        self.nd = 1
-
-    def f(self, u):
-        return - u**2
-    
-    def u_exact(self, time):
-        return 1 / (1 + time)
-    
-    def ax_plot(self, axes, time, u, u_exact, linestyle):
-        axes[0].plot(time, u, linestyle)
-        axes[0].set_xlabel('$t$ [s]')
-        axes[1].plot(time, np.abs(u[:, 0] - u_exact), linestyle)
-    
-    def plot(self, time, u, figtitle, figname):
-        fig, axes = plt.subplots(nrows=2, sharex=True)
-        u_exact = self.u_exact(time)
-        axes[0].plot(time, u_exact, 'k--')
-        self.ax_plot(axes, time, u, u_exact, 'k')
-        axes[0].legend(['Exact', 'Simulation'])
-        fig.suptitle(figtitle)
-        fig.tight_layout(rect=[0, 0.03, 1, 0.97])
-        fig.savefig(figname, bbox_inches='tight')
-
-class Pendulum:
-    def __init__(self, L, g):
-        # Parameters of the model
-        self.L = L
-        self.g = g
-
-        # Dimension of the system
-        self.nd = 2
-    
-    def f(self, u):
-        return np.array([-self.g / self.L * np.sin(u[1]), u[0]])
-    
-    def plot(self, time, u, figtitle, figname):
-        fig, axes = plt.subplots(nrows=2, sharex=True)
-        axes[0].plot(time, u[:, 1], 'k')
-        axes[0].set_ylabel(r'$\theta$')
-        axes[1].plot(time, u[:, 0], 'k')
-        axes[1].set_ylabel(r'$\theta_t$')
-        axes[1].set_xlabel('$t$ [s]')
-        fig.suptitle(figtitle)
-        fig.tight_layout(rect=[0, 0.03, 1, 0.97])
-        fig.savefig(figname, bbox_inches='tight')
+if __name__ == '__main__':
+    # Free falling ice sphere
+    tmin, tend, ntimes = 0, 25, 101
+    times = np.linspace(tmin, tend, ntimes)
+    model = FreeFall(0.01, 917, 0.9, 1.69e-5, 9.81)
+    sim = ODESim(times, ['forwardEuler', 'midpoint', 'multi_step2'], model, 0.0, fig_dir='free_fall/')
+    sim.run_schemes()
+    sim.plot()

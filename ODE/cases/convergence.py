@@ -1,8 +1,13 @@
+# Standard imports
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import create_dir
-from models import RHSSquare
-from sim import ODESim
+
+# Library import
+from odesolver.utils import create_dir
+from odesolver.solver import ODESim
+
+# Local
+from rhssquare import RHSSquare
 
 class ConvergenceODE:
     def __init__(self, tmin, tend, list_nts, schemes, model, init_value, fig_dir):
