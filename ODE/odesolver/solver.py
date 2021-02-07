@@ -45,9 +45,17 @@ class ODESim:
                         (4 * self.model.f(v[i - 1], self.times[i - 1]) + 2 * self.model.f(v[i - 2], self.times[i - 2]))
     
     def backwardEuler(self, v):
+        """ Only works with stiff problem for now """
         v[0] = self.v0
         for i in range(1, self.ntimes):
             v[i] = self.model.fbackwardEuler(v[i - 1], self.times[i - 1], self.dt)
+        
+    def trapezoidal(self, v):
+        """ Only works with nonlinear problem for now """
+        v[0] = self.v0
+        for i in range(1, self.ntimes):
+            v[i] = self.model.ftrapez(v[i - 1], self.times[i - 1], self.dt)
+        print(v.shape)
     
     def run_schemes(self):
         """ Apply scheme and plot the results """

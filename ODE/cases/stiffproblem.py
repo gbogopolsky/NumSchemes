@@ -27,6 +27,8 @@ class StiffProblem:
 if __name__ == '__main__':
     model = StiffProblem(1000, 1)
     tmin, tend = 0, 5
+
+    # Explicit solver
     dts = [1.0e-3, 1.9e-3, 2.0e-3, 2.1e-3]
     for i, dt in enumerate(dts):
         times = make_times(tmin, tend, dt)
@@ -34,6 +36,7 @@ if __name__ == '__main__':
         sim.run_schemes()
         sim.plot(f'case_{i:d}')
 
+    # Implicit methods
     dts = [5e-4, 5e-3, 5e-2, 5e-1]
     for i, dt in enumerate(dts):
         times = make_times(tmin, tend, dt)
