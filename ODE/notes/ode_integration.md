@@ -96,7 +96,63 @@ A stable and consistent $s$-multistep method is convergent (similar to Lax Theor
 
 ### Systems of ODEs and Eigenvalue stability
 
+Let us consider a system of ODEs
 
+$$
+    u_t = f(u, t) \qquad u(0) = u_0
+$$
+
+where
+
+$$
+    u = \begin{bmatrix}
+        u_1 \\
+        u_2 \\
+        \vdots\\
+        u_d
+    \end{bmatrix}
+    \qquad
+    f = \begin{bmatrix}
+        f_1 \\
+        f_2 \\
+        \vdots\\
+        f_d
+    \end{bmatrix}
+$$
+
+We linearize around the initial solution
+
+$$
+\begin{aligned}
+    u &= u_0 + \tilde{u} \\
+    f(u, t) &= f(u_0, t_0) + \pdv{f}{u}(u_0, t_0) \tilde{u} + \pdv{f}{t}(u_0, t_0)t + \mc{O}(||\tilde{u}||^2, ||\tilde{u}||t, t^2)
+\end{aligned}
+$$
+
+The system thus becomes:
+
+$$
+    \tilde{u}_t = A(t) \tilde{u} + b(t)
+$$
+
+where 
+
+$$
+    A = \pdv{f}{u}(u_0, t_0) \qquad b = f(u_0, t_0) + \pdv{f}{t}(u_0, t_0)t
+$$
+
+Supossing a stationary problem and $f(u_0, t_0) = 0$, the system becomes
+
+$$
+    \tilde{u}_t = A \tilde{u}
+$$
+
+To study the stability of a system of ODEs the following steps are taken
+
+1. Set $v^n = g^n v^0$ where $g$ is the amplification factor in the scheme
+2. Set $f^n = g^n \lambda$ (imply linearization and reduction) where $\lambda$ is an eigenvalue in fact of the specific problem at hand
+3. Solve for the roots of the polynomial in $g$ where the roots depend on $\lambda \Delta t$
+4. Determine the regions where $|g| \leq 1$
 
 <!-- Katex macros definitions -->
 $$
