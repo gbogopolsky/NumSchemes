@@ -154,6 +154,32 @@ To study the stability of a system of ODEs the following steps are taken
 3. Solve for the roots of the polynomial in $g$ where the roots depend on $\lambda \Delta t$
 4. Determine the regions where $|g| \leq 1$
 
+### Multi-step methods
+
+#### Adams-Bashforth methods
+
+$$
+    v^{n + 1} - v^n = \Delta t \sum_{i = 1}^s \beta_i f^{n + 1 -i}
+$$
+
+![Stability regions for Adams-Bashforth methods for different orders](images/ab_stab.png)
+
+#### Adams-Moulton methods
+
+$$
+    v^{n + 1} - v^n = \Delta t \sum_{i = 0}^s \beta_i f^{n + 1 -i}
+$$
+
+![Stability regions for Adams-Moulton methods for different orders](images/am_stab.png)
+
+#### Backward differentiation methods (used in CVODE)
+
+$$
+    v^{n + 1} - \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \Delta t \beta_0 f^{n + 1}
+$$
+
+![Stability regions for Backward differentiation methods for different orders](images/bd_stab.png)
+
 <!-- Katex macros definitions -->
 $$
     \gdef\mrm#1{\mathrm{#1}}
