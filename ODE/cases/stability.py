@@ -30,7 +30,7 @@ def ax_plot_contour(ax, X, Y, Z):
     ax.set_ylabel(r'$\lambda_i \Delta t$')
 
 if __name__ == '__main__':
-    fig_dir = 'figures/'
+    fig_dir = 'figures/stability/'
     create_dir(fig_dir)
     
     # Backward euler
