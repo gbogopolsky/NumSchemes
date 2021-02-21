@@ -100,6 +100,7 @@ static int Jac(realtype t, N_Vector y, N_Vector fy, SUNMatrix J,
 
 static void PrintOutput(realtype t, realtype y1, realtype y2, realtype y3);
 static void PrintRootInfo(int root_f1, int root_f2);
+static void PrintOutputFile(FILE* fptr, realtype t, realtype y1, realtype y2, realtype y3);
 
 /* Private function to print final statistics */
 
@@ -129,6 +130,10 @@ int main()
   void *cvode_mem;
   int retval, retvalr, iout;
   int rootsfound[2];
+
+  FILE* fptr;
+  fptr = fopen("data/cvRobert_dns.dat", "w");
+  fprintf(fptr, "t [s] y1 [] y2 [] y3 []\n");
 
   y = abstol = NULL;
   A = NULL;
@@ -197,7 +202,7 @@ int main()
   while(1) {
     retval = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
     PrintOutput(t, Ith(y,1), Ith(y,2), Ith(y,3));
-
+    PrintOutputFile(fptr, t, Ith(y,1), Ith(y,2), Ith(y,3));
     if (retval == CV_ROOT_RETURN) {
       retvalr = CVodeGetRootInfo(cvode_mem, rootsfound);
       if (check_retval(&retvalr, "CVodeGetRootInfo", 1)) return(1);
@@ -231,6 +236,9 @@ int main()
 
   /* Free the matrix memory */
   SUNMatDestroy(A);
+
+  /* Close file pointer */
+  fclose(fptr);
 
   return(retval);
 }
@@ -323,6 +331,15 @@ static void PrintRootInfo(int root_f1, int root_f2)
 {
   printf("    rootsfound[] = %3d %3d\n", root_f1, root_f2);
 
+  return;
+}
+
+/* 
+ * Print to file
+ */
+static void PrintOutputFile(FILE* fptr, realtype t, realtype y1, realtype y2, realtype y3)
+{
+  fprintf(fptr, "%0.4e %14.6e  %14.6e  %14.6e\n", t, y1, y2, y3);
   return;
 }
 
