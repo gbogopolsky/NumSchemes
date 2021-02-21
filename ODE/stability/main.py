@@ -51,3 +51,5 @@ if __name__ == '__main__':
                 / (2 * (1 - (X + 1j * Y) * beta_0))
     g = np.maximum(np.abs(root1), np.abs(root2))
     plot_stability(X, Y, g, 'BDF2', fig_dir + 'bdf2')
+
+    # Third order BDF

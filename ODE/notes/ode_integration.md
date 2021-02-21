@@ -18,7 +18,7 @@ $$
 
 where $i$ spans the set of all indices required by the numerical scheme.
 
-In the case of a $s$-multistep method
+In the case of an $s$-multistep method
 
 $$
     v^{n + 1} + \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \sum_{i = 0}^s \beta_i f^{n + 1 - i}
@@ -29,7 +29,7 @@ $$
 The local truncation error (LTE) is defined as
 
 $$
-    \tau = N(v^i, t^i, \Delta t) - u^{n + 1}
+    \tau = N(u^i, t^i, \Delta t) - u^{n + 1}
 $$
 
 The local order of accuracy $p$ is
@@ -55,7 +55,7 @@ Consistency requires that the scheme be at least first order ($p = 1$) for the n
 A finite difference method for solving
 
 $$
-    u_t = f(u(t), t) \qquad u(0) = u_0 \qquad 0 < t < T
+    u_t = f(u(t), t) \qquad u(0) = u_0 \qquad 0 \leq t \leq T
 $$
 
 is convergent if
@@ -64,13 +64,13 @@ $$
     \max_{n \in \iint{0}{T/\Delta t}} |v^n - u(n\Delta t)| \to 0 \qquad \text{as} \qquad \Delta t \to 0
 $$
 
-The method is said to have global order of accuracy $p$ is
+The method is said to have global order of accuracy $p$ if
 
 $$
     \max_{n \in \iint{0}{T/\Delta t}} |v^n - u(n\Delta t)| \leq \mc{O}(\Delta t^p)
 $$
 
-for any $f(u, t)$ that has $p$ continuous derivatives.
+for any $f(u, t)$ that is of class $\mc{C}^p$ on $\R \times [0, T]$.
 
 ### Stability
 
@@ -175,7 +175,24 @@ $$
 #### Backward differentiation methods (used in CVODE)
 
 $$
-    v^{n + 1} - \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \Delta t \beta_0 f^{n + 1}
+    v^{n + 1} + \sum_{i=1}^p \alpha_i v^{n + 1 - i} = \Delta t \beta_0 f^{n + 1}
+$$
+
+Expressing the derivative operator $D$ in terms of increment operator $E$ yields:
+
+$$
+    D = \frac{1}{\Delta t} \sum_{k=0}^{+\infty} \frac{(1 - E^{-1})^k}{k}
+$$
+
+Expanding the product and rearranging the sums yield:
+
+$$
+\begin{aligned}
+    \beta_0 &= \left(\sum_{k=1}^p \frac{1}{k}\right)^{-1} \\
+    \alpha_1 &= \beta_0 (-1)^i p \\
+    \alpha_i &= \beta (-1)^i \sum_{k=i}^p \frac{1}{k} \binom{k}{i} \\
+    \sum_{i=1}^p \alpha_i &= -1
+\end{aligned}
 $$
 
 ![Stability regions for Backward differentiation methods for different orders](images/bd_stab.png)
