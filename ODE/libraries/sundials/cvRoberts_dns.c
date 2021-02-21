@@ -34,6 +34,7 @@
  * -----------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <time.h>
 
 #include <cvode/cvode.h>               /* prototypes for CVODE fcts., consts.  */
 #include <nvector/nvector_serial.h>    /* access to serial N_Vector            */
@@ -123,6 +124,10 @@ static int check_ans(N_Vector y, realtype t, realtype rtol, N_Vector atol);
 
 int main()
 {
+
+  clock_t start_t, end_t;
+  start_t = clock();
+
   realtype reltol, t, tout;
   N_Vector y, abstol;
   SUNMatrix A;
@@ -239,6 +244,12 @@ int main()
 
   /* Close file pointer */
   fclose(fptr);
+
+  /* Time monitoring */
+   end_t = clock();
+
+   printf("Total time taken by CPU: %lu\n", end_t);
+   printf("Exiting of the program...\n");
 
   return(retval);
 }
