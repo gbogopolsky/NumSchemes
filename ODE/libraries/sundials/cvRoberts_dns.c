@@ -125,7 +125,7 @@ static int check_ans(N_Vector y, realtype t, realtype rtol, N_Vector atol);
 int main()
 {
 
-  clock_t start_t, end_t;
+  clock_t start_t, init_t, firstit_t, end_t;
   start_t = clock();
 
   realtype reltol, t, tout;
@@ -174,6 +174,10 @@ int main()
   retval = CVodeInit(cvode_mem, f, T0, y);
   if (check_retval(&retval, "CVodeInit", 1)) return(1);
 
+  /* Time monitoring */
+  init_t = clock();
+  printf("Time taken by CPU for init CVODE: %lu\n", init_t - start_t);
+
   /* Call CVodeSVtolerances to specify the scalar relative tolerance
    * and vector absolute tolerances */
   retval = CVodeSVtolerances(cvode_mem, reltol, abstol);
@@ -206,6 +210,7 @@ int main()
   iout = 0;  tout = T1;
   while(1) {
     retval = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
+
     PrintOutput(t, Ith(y,1), Ith(y,2), Ith(y,3));
     PrintOutputFile(fptr, t, Ith(y,1), Ith(y,2), Ith(y,3));
     if (retval == CV_ROOT_RETURN) {
@@ -216,6 +221,11 @@ int main()
 
     if (check_retval(&retval, "CVode", 1)) break;
     if (retval == CV_SUCCESS) {
+      if (iout == 0) {
+        /* Time monitoring */
+        firstit_t = clock();
+        printf("Time taken by CPU for first it of CVODE: %lu\n", firstit_t - init_t);
+      }
       iout++;
       tout *= TMULT;
     }
@@ -246,10 +256,8 @@ int main()
   fclose(fptr);
 
   /* Time monitoring */
-   end_t = clock();
-
-   printf("Total time taken by CPU: %lu\n", end_t);
-   printf("Exiting of the program...\n");
+  end_t = clock();
+  printf("Time taken by CPU since initfirstit: %lu\n", end_t - firstit_t);
 
   return(retval);
 }

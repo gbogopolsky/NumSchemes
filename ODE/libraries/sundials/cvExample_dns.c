@@ -126,7 +126,7 @@ static int check_ans(N_Vector y, realtype t, realtype rtol, N_Vector atol);
 int main()
 {
 
-  clock_t start_t, end_t;
+  clock_t start_t, init_t, firstit_t, end_t;
   start_t = clock();
 
   realtype reltol, t, tout;
@@ -166,8 +166,8 @@ int main()
 
   /* Call CVodeCreate to create the solver memory and specify the 
    * Backward Differentiation Formula */
-  // cvode_mem = CVodeCreate(CV_BDF);
-  cvode_mem = CVodeCreate(CV_ADAMS);
+  cvode_mem = CVodeCreate(CV_BDF);
+  // cvode_mem = CVodeCreate(CV_ADAMS);
   if (check_retval((void *)cvode_mem, "CVodeCreate", 0)) return(1);
   
   /* Call CVodeInit to initialize the integrator memory and specify the
@@ -175,6 +175,10 @@ int main()
    * the initial dependent variable vector y. */
   retval = CVodeInit(cvode_mem, f, T0, y);
   if (check_retval(&retval, "CVodeInit", 1)) return(1);
+
+  /* Time monitoring */
+  init_t = clock();
+  printf("Time taken by CPU for init CVODE: %lu\n", init_t - start_t);
 
   /* Call CVodeSVtolerances to specify the scalar relative tolerance
    * and vector absolute tolerances */
@@ -208,16 +212,17 @@ int main()
   iout = 0;  tout = T1;
   while(1) {
     retval = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
+    printf("iout = %d\n", iout);
     PrintOutput(t, Ith(y,1), Ith(y,2), Ith(y,3));
     PrintOutputFile(fptr, t, Ith(y,1), Ith(y,2), Ith(y,3));
-    if (retval == CV_ROOT_RETURN) {
-      retvalr = CVodeGetRootInfo(cvode_mem, rootsfound);
-      if (check_retval(&retvalr, "CVodeGetRootInfo", 1)) return(1);
-      PrintRootInfo(rootsfound[0],rootsfound[1]);
-    }
 
     if (check_retval(&retval, "CVode", 1)) break;
     if (retval == CV_SUCCESS) {
+      if (iout == 0) {
+        /* Time monitoring */
+        firstit_t = clock();
+        printf("Time taken by CPU for first it of CVODE: %lu\n", firstit_t - init_t);
+      }
       iout++;
       tout += TADD;
     }
@@ -249,9 +254,7 @@ int main()
 
   /* Time monitoring */
   end_t = clock();
-
-  printf("Total time taken by CPU: %lu\n", end_t);
-  printf("Exiting of the program...\n");
+  printf("Time taken by CPU for rest of simulation: %lu\n", end_t - firstit_t);
 
   return(retval);
 }
