@@ -84,7 +84,7 @@
 #define T0    RCONST(0.0)      /* initial time           */
 #define T1    RCONST(0.4)      /* first output time      */
 #define TMULT RCONST(10.0)     /* output time factor     */
-#define TADD  RCONST(0.1)     /* output time factor     */
+#define TADD  RCONST(0.01)     /* output time factor     */
 #define NOUT  100              /* number of output times */
 
 #define ZERO  RCONST(0.0)
@@ -166,7 +166,8 @@ int main()
 
   /* Call CVodeCreate to create the solver memory and specify the 
    * Backward Differentiation Formula */
-  cvode_mem = CVodeCreate(CV_BDF);
+  // cvode_mem = CVodeCreate(CV_BDF);
+  cvode_mem = CVodeCreate(CV_ADAMS);
   if (check_retval((void *)cvode_mem, "CVodeCreate", 0)) return(1);
   
   /* Call CVodeInit to initialize the integrator memory and specify the
@@ -247,10 +248,10 @@ int main()
   fclose(fptr);
 
   /* Time monitoring */
-   end_t = clock();
+  end_t = clock();
 
-   printf("Total time taken by CPU: %lu\n", end_t);
-   printf("Exiting of the program...\n");
+  printf("Total time taken by CPU: %lu\n", end_t);
+  printf("Exiting of the program...\n");
 
   return(retval);
 }
@@ -272,9 +273,9 @@ static int f(realtype t, N_Vector y, N_Vector ydot, void *user_data)
 
   y1 = Ith(y,1); y2 = Ith(y,2); y3 = Ith(y,3);
 
-  Ith(ydot,1) = RCONST(2.0)*y1 + y2;
-  Ith(ydot,3) = - y1;
-  Ith(ydot,2) = y1 + y2 + y3;
+  Ith(ydot, 1) = RCONST(2.0)*y1 + y2;
+  Ith(ydot, 2) = - y1;
+  Ith(ydot, 3) = y1 + y2 + y3;
 
   return(0);
 }

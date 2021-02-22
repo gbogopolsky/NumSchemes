@@ -55,7 +55,7 @@ LIBRARIES = -lsundials_cvode -lsundials_nvecserial -lsundials_nvecmanyvector ${L
 
 # -----------------------------------------------------------------------------------------
 
-EXAMPLES =  cvRoberts_dns cvRoberts_dns_uw cvRoberts_dns_negsol cvRoberts_dns_constraints csExample_dns
+EXAMPLES =  cvRoberts_dns cvRoberts_dns_uw cvRoberts_dns_negsol cvRoberts_dns_constraints cvExample_dns
 EXAMPLES_DEPENDENCIES = 
 
 OBJECTS = ${EXAMPLES:=.o}
