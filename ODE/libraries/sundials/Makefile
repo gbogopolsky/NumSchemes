@@ -55,32 +55,11 @@ LIBRARIES = -lsundials_cvode -lsundials_nvecserial -lsundials_nvecmanyvector ${L
 
 # -----------------------------------------------------------------------------------------
 
-EXAMPLES =  cvRoberts_dns cvRoberts_dns_uw cvRoberts_dns_negsol cvRoberts_dns_constraints
+EXAMPLES =  cvRoberts_dns cvRoberts_dns_uw cvRoberts_dns_negsol cvRoberts_dns_constraints csExample_dns
 EXAMPLES_DEPENDENCIES = 
 
 OBJECTS = ${EXAMPLES:=.o}
 OBJECTS_DEPENDENCIES = ${EXAMPLES_DEPENDENCIES:=.o}
-
-# LAPACK Examples
-EXAMPLES_BL = 
-EXAMPLES_DEPENDENCIES_BL = 
-
-OBJECTS_BL = ${EXAMPLES_BL:=.o}
-OBJECTS_DEPENDENCIES_BL = ${EXAMPLES_DEPENDENCIES_BL:=.o}
-
-# KLU Examples
-EXAMPLES_KLU = 
-EXAMPLES_DEPENDENCIES_KLU = 
-
-OBJECTS_KLU = ${EXAMPLES_KLU:=.o}
-OBJECTS_DEPENDENCIES_KLU = ${EXAMPLES_DEPENDENCIES_KLU:=.o}
-
-# SuperLU_MT Examples
-EXAMPLES_SLUMT = 
-EXAMPLES_DEPENDENCIES_SLUMT = 
-
-OBJECTS_SLUMT = ${EXAMPLES_SLUMT:=.o}
-OBJECTS_DEPENDENCIES_SLUMT = ${EXAMPLES_DEPENDENCIES_SLUMT:=.o}
 
 # -----------------------------------------------------------------------------------------
 
@@ -91,7 +70,7 @@ OBJECTS_DEPENDENCIES_SLUMT = ${EXAMPLES_DEPENDENCIES_SLUMT:=.o}
 
 # -----------------------------------------------------------------------------------------
 
-all: examples examples_bl examples_klu examples_slumt
+all: examples
 
 examples: ${OBJECTS}
 	@for i in ${EXAMPLES} ; do \
@@ -99,31 +78,8 @@ examples: ${OBJECTS}
 	  ${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LINKFLAGS} ; \
 	done
 
-examples_bl: ${OBJECTS_BL}
-	@for i in ${EXAMPLES_BL} ; do \
-	  echo "${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_BL} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_LAPACK} ${LINKFLAGS_LAPACK}" ; \
-	  ${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_BL} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_LAPACK} ${LINKFLAGS_LAPACK} ; \
-	done
-
-examples_klu: ${OBJECTS_KLU}
-	@for i in ${EXAMPLES_KLU} ; do \
-	  echo "${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_KLU} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_KLU} ${LINKFLAGS_KLU}" ; \
-	  ${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_KLU} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_KLU} ${LINKFLAGS_KLU} ; \
-	done
-
-examples_slumt: ${OBJECTS_SLUMT}
-	@for i in ${EXAMPLES_SLUMT} ; do \
-	  echo "${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_SLUMT} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_SLUMT} ${LINKFLAGS_SLUMT}" ; \
-	  ${CC} -o $${i} $${i}.o ${OBJECTS_DEPENDENCIES_SLUMT} ${CFLAGS} ${LDFLAGS} ${INCLUDES} -L${libdir} ${LIBRARIES} ${LIBRARIES_SLUMT} ${LINKFLAGS_SLUMT} ; \
-	done
-
 ${OBJECTS}: ${OBJECTS_DEPENDENCIES}
 
-${OBJECTS_BL}: ${OBJECTS_DEPENDENCIES_BL}
-
-${OBJECTS_KLU}: ${OBJECTS_DEPENDENCIES_KLU}
-
-${OBJECTS_SLUMT}: ${OBJECTS_DEPENDENCIES_SLUMT}
 
 clean:
 	rm -f ${OBJECTS_DEPENDENCIES} ${OBJECTS_DEPENDENCIES_BL} ${OBJECTS_DEPENDENCIES_KLU} ${OBJECTS_DEPENDENCIES_SLUMT}
