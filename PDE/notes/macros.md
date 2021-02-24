@@ -9,6 +9,9 @@ $$
     \gdef\P{\mathbb{P}}
     \gdef\R{\mathbb{R}}
     \gdef\N{\mathbb{N}}
+    \gdef\I{\mrm{I}}
+    \gdef\tu{\tilde{u}}
+    \gdef\bu{\bar{u}}
     \gdef\mc#1{\mathcal{#1}}
-    \gdef\iint#1#2{\llbracket #1, #2 \rrbracket}
+    \gdef\intint#1#2{\llbracket #1, #2 \rrbracket}
 $$
