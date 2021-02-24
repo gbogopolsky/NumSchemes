@@ -217,3 +217,41 @@ $$
 \end{aligned}
 $$
 
+### One parameter family schemes on the support $(i - 2, i - 1, i, i + 1)$
+
+We consider second order schemes on the support $(i - 2, i - 1, i, i + 1)$. Thus the $b_j$ verify the relations:
+
+$$
+\begin{aligned}
+b_{-2} + b_{-1} + b_0 + b_1 &= 1 \\
+-2b_{-2} - b_{-1} + b_1 &= -\sig \\
+4b_{-2} + b_{-1} + b_1 &= \sig^2
+\end{aligned}
+$$
+
+Solving the system:
+
+$$
+\begin{aligned}
+b_{-2} &= - \gamma\\
+b_{-1} &= \frac{\sig(\sig + 1)}{2} + 3 \gamma\\
+b_0 &= 1 - \sig^2 - 3 \gamma\\
+b_1 &= \frac{\sig(\sig - 1)}{2} + \gamma
+\end{aligned}
+$$
+
+Hence the scheme can be written as:
+
+$$
+    S = S_\mrm{LW} + \gamma H(-1, 3, -3, 1)
+$$
+
+Multiple schemes can then be derived:
+$$
+\begin{aligned}
+    &S_\mrm{LW}(0, \frac{\sig(\sig + 1)}{2}, 1 - \sig^2, \frac{\sig(\sig - 1)}{2}) \\
+    &S_\mrm{SOU}(\frac{\sig(\sig - 1)}{2}, \sig(2 - \sig), \frac{(1 - \sig)(2 - \sig)}{2}, 0) \\
+    &S_\mrm{Fromm}(\frac{\sig(\sig - 1)}{4}, \frac{\sig(5 - \sig)}{4}, \frac{(1- \sig)(4 + \sig)}{4}, \frac{\sig(\sig - 1)}{2}) \\
+    &S_\mrm{3}(\frac{\sig(\sig^2 - 1)}{6}, \frac{\sig(2 - \sig)(\sig + 1)}{2}, \frac{\sig(2 - \sig)(1 - \sig^2)}{2}, \frac{\sig(\sig - 1)(2 - \sig^2)}{6})
+\end{aligned}
+$$
