@@ -104,7 +104,7 @@ We can then identify the exact and numerical amplification factors:
 $$
 \begin{aligned}
     \tilde{G} &= e^{-\I \tilde{\omega} \Delta  t} = |\tilde{{G}}| e^{-\I\tilde{\Phi}} \\
-    G &= e^{-\I \omega \Delta  t} = |\tilde{{G}}| e^{-\I\Phi} 
+    G &= e^{-\I \omega \Delta  t} = |G| e^{-\I\Phi} 
 \end{aligned}
 $$
 
@@ -113,8 +113,23 @@ From these two amplification factors the diffusion and dispersion errors are:
 $$
 \begin{aligned}
     \veps_D &= \frac{|G|}{|\tilde{G}|} \\
-    \veps_\phi &= \frac{\tilde{\Phi}}{\Phi}
+    \veps_\phi &= \frac{\Phi}{\tilde{\Phi}}
 \end{aligned}
+$$
+
+#### Application to convection equation
+
+Let us consider the linear convection equation:
+
+$$
+    \pdv{u}{t} + a \pdv{u}{x} = 0 \implies \tilde{G} = e^{-\I a k \Delta t} \implies \veps_D = |G|, \veps_\phi = \frac{\Phi}{a k \Delta t} = \frac{a_\mrm{num}}{a}
+$$
+
+
+
+For the diffusion problem:
+$$
+    \pdv{u}{t} = \alpha \pmdv{u}{x}{2} \implies \tilde{G} = e^{-\alpha k^2}
 $$
 
 ## Chapter 8: General properties and High-Resolution Numerical Schemes
@@ -158,7 +173,7 @@ $$
 Reinjecting the Taylor expansions into the initial formula:
 
 $$
-    \Delta t \pdv{u}{t} + \sum_{m=2}^{+\infty} \frac{\Delta t^m}{m!} \left(\pmdv{u}{t}{m}\right) = \sum_j b_j \Delta x \pdv{u}{x} + \sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{u}{x}{m}\right)
+    \Delta t \pdv{u}{t} + \sum_{m=2}^{+\infty} \frac{\Delta t^m}{m!} \left(\pmdv{u}{t}{m}\right) = \sum_j j b_j \Delta x \pdv{u}{x} + \sum_j b_j \sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{u}{x}{m}\right)
 $$
 
 For the linear convection equation:
@@ -167,19 +182,23 @@ $$
     \pdv{u}{t} + a \pdv{u}{x} = 0 \implies \sum_j j \cdot b_j = - \sig 
 $$
 
+$$
+    \pdv{u}{t} = - a \pdv{u}{x} \implies - a \Delta t \pdv{u}{x} + \ldots = \sum_j j b_j \Delta x \pdv{u}{x} + \ldots
+$$
+
 This yields:
 
 $$
 \begin{aligned}
-    &\pdv{u}{t} = -a \pdv{u}{x} + \frac{1}{\Delta t}\sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{u}{x}{m}\right) - \sum_{m=2}^{+\infty} \frac{\Delta t^{m-1}}{m!} \left(\pmdv{u}{t}{m}\right) \\
-\implies &\pdv{}{t} = -a \pdv{}{x} + \frac{1}{\Delta t}\sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{}{x}{m}\right) - \sum_{m=2}^{+\infty} \frac{\Delta t^{m-1}}{m!} \left(\pmdv{}{t}{m}\right)
+    &\pdv{u}{t} = -a \pdv{u}{x} + \frac{1}{\Delta t}\sum_j b_j \sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{u}{x}{m}\right) - \sum_{m=2}^{+\infty} \frac{\Delta t^{m-1}}{m!} \left(\pmdv{u}{t}{m}\right) \\
+\implies &\pdv{}{t} = -a \pdv{}{x} + \frac{1}{\Delta t}\sum_j b_j\sum_{m = 2}^{+\infty} \frac{(j \Delta x)^m}{m!} \left(\pmdv{}{x}{m}\right) - \sum_{m=2}^{+\infty} \frac{\Delta t^{m-1}}{m!} \left(\pmdv{}{t}{m}\right)
 \end{aligned}
 $$
 
 Let us recall a simple formula where $y$ and $z$ are first order terms compared to $x$:
 
 $$
-    (x + y + z)^m = x\left(1 + \frac{y}{x} + \frac{z}{x} \right)^m = x^m + mx^{m-1} y + mx^{m-1} z + \mrm{HOT}
+    (x + y + z)^m = x^m\left(1 + \frac{y}{x} + \frac{z}{x} \right)^m = x^m + mx^{m-1} y + mx^{m-1} z + \mrm{HOT}
 $$
 
 Developing the derivative operator using the formula above:
