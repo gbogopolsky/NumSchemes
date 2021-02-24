@@ -76,10 +76,28 @@ def iterations(nt, res, u, sigma, scheme):
 
 @njit(cache=True)
 def bjs(sigma, scheme):
-    if scheme == 'C1':
+    if scheme == 'FOU':
+        ju = 1
+        jd = 0
+        coeffs = [sigma, 1 - sigma]
+    elif scheme == 'C1' or scheme == 'LW':
         ju = 1
         jd = 1
         coeffs = [0.5 * sigma * (sigma + 1), 1 - sigma**2, 0.5 * sigma * (sigma - 1)]
+    elif scheme == 'SOU':
+        ju = 2
+        jd = 0
+        coeffs = [sigma * (sigma - 1) / 2, sigma * (2 - sigma), (1 - sigma) * (2 - sigma) / 2]
+    elif scheme == 'FR':
+        ju = 2
+        jd = 1
+        coeffs = [sigma * (sigma - 1) / 4, sigma * (5 - sigma) / 4, (1 - sigma) * (4 + sigma) / 4,
+                    sigma * (sigma - 1) / 4]
+    elif scheme == 'TOS':
+        ju = 2
+        jd = 1
+        coeffs = [sigma * (sigma**2 - 1) / 6, sigma * (2 - sigma) * (sigma + 1) / 2, 
+            (2 - sigma) * (1 - sigma**2) / 2, sigma * (sigma - 1) * (2 - sigma) / 6]
     elif scheme == 'C2':
         ju = 2
         jd = 2
@@ -88,6 +106,7 @@ def bjs(sigma, scheme):
                 (sigma - 2) * (sigma - 1) * (sigma + 1) * (sigma + 2) / 4,
                 - (sigma - 2) * (sigma - 1) * sigma * (sigma + 2) / 6,
                 (sigma - 2) * (sigma - 1) * sigma * (sigma + 1) / 24]
+    
 
     return coeffs, ju, jd
 

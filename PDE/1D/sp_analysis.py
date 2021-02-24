@@ -48,7 +48,6 @@ def ampl_factor(phi, sigma, scheme):
         G += coeffs[ju + j] * np.exp(j * 1j * phi)
     return G
 
-
 def errors(G, phi, sigma):
     """ Computation of diffusion and dispersion error for a constant advection
     speed problem """

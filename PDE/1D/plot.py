@@ -47,7 +47,7 @@ def plot_G(scheme, cfls, fig_dir):
     fig, axes = plt.subplots(ncols=2, figsize=(10, 6))
     for cfl in cfls:
         # df_err, dp_err = sp_analysis.errors(getattr(sp_analysis, f'G_{scheme}'), phi, cfl)
-        df_err, dp_err = sp_analysis.errors(ampl_factor(scheme), phi, cfl)
+        df_err, dp_err = sp_analysis.errors(ampl_factor(phi, cfl, scheme), phi, cfl)
         axes[0].plot(phi_deg, df_err, label=f'CFL = {cfl:.2f}')
         axes[1].plot(phi_deg, dp_err, label=f'CFL = {cfl:.2f}')
     ax_prop_G(axes[0], r'$\varepsilon_D$')
