@@ -21,7 +21,7 @@ where $i$ spans the set of all indices required by the numerical scheme.
 In the case of an $s$-multistep method
 
 $$
-    v^{n + 1} + \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \sum_{i = 0}^s \beta_i f^{n + 1 - i}
+    v^{n + 1} + \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \Delta t \sum_{i = 0}^s \beta_i f^{n + 1 - i}
 $$
 
 ### Local order of accuracy and consistency
@@ -93,6 +93,43 @@ We solve the unforced problem in $z$, determine the roots of the polynomial and 
 ### Dahlquist Equivalence Theorem
 
 A stable and consistent $s$-multistep method is convergent (similar to Lax Theorem).
+
+### Systems of ODEs and Implicit integration
+
+Taking an $s$-multistep method:
+
+$$
+    v^{n + 1} + \sum_{i=1}^s \alpha_i v^{n + 1 - i} = \Delta t \sum_{i = 0}^s \beta_i f^{n + 1 - i}
+$$
+
+Assuming $\beta_0 \neq 0$:
+
+$$
+\begin{aligned}
+    v^{n + 1} - \Delta t \beta_0 f(v^{n + 1}, t^{n + 1}) + \sum_{i=1}^s \alpha_i v^{n + 1 - i} - \sum_{i = 1}^s \beta_i f^{n + 1 - i} = 0 \\
+    R(w) = w - \Delta t \beta_0 f(w, t^{n + 1}) + \sum_{i=1}^s \alpha_i v^{n + 1 - i} - \sum_{i = 1}^s \beta_i f^{n + 1 - i} = 0 \\
+\end{aligned}
+$$
+
+Setting an initial guess for $v^{n + 1}$ as $w^0$, we iterate from step $m$ to step $m+1$ in the following fashion:
+
+$$
+\begin{aligned}
+    R(w^{m+1}) &= 0 \\
+    R(w^m + \Delta w) &= R(w^m) + \left.\pdv{R}{w}\right|_{w^m} \Delta w = 0 \\
+    \left.\pdv{R}{w}\right|_{w^m} \Delta w &= - R(w^m)
+\end{aligned}
+$$
+where
+$$
+\left.\pdv{R}{w}\right|_{w^m} = I - \Delta t \beta_0 \left.\pdv{f}{u}\right|_{w^m}
+$$
+
+Newton-method:
+
+$$
+    f'(x_n)(x_{n + 1} - x_n) = - f(x_n)
+$$
 
 ### Systems of ODEs and Eigenvalue stability
 
