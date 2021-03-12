@@ -22,19 +22,19 @@
 
 SHELL = sh
 
-prefix       = /Users/cheng/opt/sundials/instdir
-exec_prefix  = /Users/cheng/opt/sundials/instdir
-includedir   = /Users/cheng/opt/sundials/instdir/include
-libdir       = /Users/cheng/opt/sundials/instdir/lib
+prefix       = /usr/local/Cellar/sundials/5.7.0
+exec_prefix  = /usr/local/Cellar/sundials/5.7.0
+includedir   = /usr/local/Cellar/sundials/5.7.0/include
+libdir       = /usr/local/Cellar/sundials/5.7.0/lib
 
-CPP      = /Library/Developer/CommandLineTools/usr/bin/cc
+CPP      = /usr/local/bin/g++-10
 CPPFLAGS = -O3 -DNDEBUG
-CC       = /Library/Developer/CommandLineTools/usr/bin/cc
+CC       = /usr/local/bin/gcc-10
 CFLAGS   = -O3 -DNDEBUG
-LDFLAGS  = 
+LDFLAGS  =
 LIBS     =  -lm
 
-LINKFLAGS = -Wl,-rpath,/Users/cheng/opt/sundials/instdir/lib
+LINKFLAGS = -Wl,-rpath,/usr/local/Cellar/sundials/5.7.0/lib
 
 # -----------------------------------------------------------------------------------------
 

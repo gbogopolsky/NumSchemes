@@ -3,3 +3,7 @@ __pycache__
 *.egg-info/
 .DS_Store
 .idea
+cvExample_dns
+cvExample_dns.o
+cvRoberts_dns
+cvRoberts_dns.o
