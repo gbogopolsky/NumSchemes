@@ -81,3 +81,67 @@ $$
 
 Moreover since the two vectors $(j\sqrt{b_j})$ and $(\sqrt{b_j})$ are non colinear (except for $b_j = 0$ which is not possible) then the inequality is strict and $\sig^2 < \sum_j j^2 b_j$ finishing the proof.
 
+#### High-resolution schemes and the concept of limiters
+
+1. Select a first-order monotone scheme (usually the upwind scheme), as reference. Express the high order scheme as the monotone scheme plus additional terms
+2. Multiply the additional terms by a limiting funciton $\Psi(r_i)$, expressed as a function or ratios of successive gradients.
+3. Express the monotonicity conditions to derive conditions on the limiters
+
+For example for a second order upwind scheme:
+$$
+\begin{aligned}
+\dv{u_i}{t} &= - \frac{a}{2 \Delta x}(3u_i - 4 u_{i-1} + u_{i-2}) \\
+&= - \frac{a}{2\Delta x}(-4(u_{i-1} - u_i) + (u_{i-2} - u_i)) \\
+&= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{2\Delta x}(-2(u_{i-1} - u_i) + (u_{i-2} - u_i)) \\
+&= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{2\Delta x}(-(u_{i-1} - u_i) + (u_{i-2} - u_{i-1})) \\
+&= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{2\Delta x}(-(u_{i-1} - u_i) + (u_{i-2} - u_{i-1})) \\
+\end{aligned}
+$$
+
+We introduce the ratio of successive gradient:
+$$
+r_i = \frac{u_{i+1} - u_i}{u_{i} - u_{i-1}}
+$$
+
+Multiplying the additional terms:
+
+$$
+\begin{aligned}
+\dv{u_i}{t} &= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{\Delta x}(\frac{1}{2}(u_i - u_{i-1}) - \frac{1}{2}(u_{i-1} - u_{i-2})) \\
+&= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{\Delta x}(\frac{1}{2}\Psi(r_i)(u_i - u_{i-1}) - \frac{1}{2}\Psi(r_{i-1})(u_{i-1} - u_{i-2})) \\
+&= - \frac{a}{\Delta x}\left[1 - \frac{1}{2}\Psi(r_i) + \frac{1}{2}\Psi(r_{i-1})/r_{i-1}\right](u_i - u_{i-1})
+\end{aligned}
+$$
+
+Requiring the terms in the brackets to be positive yields:
+
+$$
+    0 \leq \Psi(r) \leq \min(2r, 2)
+$$
+
+For the accuracy of a linear solution:
+
+$$
+    \Psi(1) = 1
+$$
+
+For the SOU scheme as base:
+
+$$
+u_i^{n+1} = u_i^n - \sigma\left[1 + \frac{1}{2}(1-\sigma)(\Psi(r_i) - \Psi(r_{i-1})/r_{i-1})\right]
+$$
+
+We recover the SOU scheme for $\Psi = 1$ and the LW scheme for $\Psi = r$.
+
+Various limiters can then be defined:
+
+$$
+\begin{aligned}
+&\mrm{Van Leer} \qquad \Psi(r) = \frac{r + |r|}{1 + r} \\
+&\mrm{Min-mod} \qquad \Psi(r) = \mrm{min-mod}(r, 1) \\
+&\mrm{Superbee} \qquad \Psi(r) = \max(0, \min(2r, 1), \min(r, 2)) \\
+&\beta-\mrm{limiters} \qquad \Psi(r) = \max(0, \min(\beta r, 1), \min(r, \beta)) \\
+&\mrm{Osher limiter} \qquad \Psi(r) = \max(0, \min(r, 2)) \\
+&\alpha-\mrm{limiters} \qquad \Psi(r) = \max(0, \min(2r, \alpha r + 1 - \alpha, 2))
+\end{aligned}
+$$
